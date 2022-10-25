@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Site</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            padding-top: 50px;
+        }
+
+        .custom-centered {
+            margin: 0 auto;
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="jumbotron">
+            <div class="custom-centered">
+                <form action="/process">
+                    <h5>Put Name of the file in csv folder</h5>
+                    <input type="text" name="fileName" required />
+                    <button class="btn btn-warning">Generate</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fileName = form.fileName.value;
+            const result = await fetch('/process', {
+                method: 'POST',
+                body: JSON.stringify({ fileName }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            const data = await result.json();
+            console.log(data);
+            if (data === 0)
+                alert("Failed, make sure number of rows in the csv file is greater than 1 and less than 10000")
+            else if (data)
+                alert(`Successfuly, generated 2 files in downloads folder, check them ${data} !!!`)
+            else
+                alert("Failed, make sure the file name is exist in csv folder !!!")
+        });
+    </script>
+</body>
+
+</html>
